@@ -15,7 +15,7 @@ DIR_SRC:=src
 EXEC_emergence:=$(DIR_BUILD)/emergence.out
 EXECS+=$(EXEC_emergence)
 # Library support
-LDLIBS_emergence:=$(addprefix -l,SDL2 SDL2_image SDL2_mixer gcov stdc++)
+LDLIBS_emergence:=$(addprefix -l,SDL2 SDL2main SDL2_image SDL2_mixer gcov stdc++)
 # Standard
 CXXFLAGS_emergence:=$(CXXFLAGS_STD) $(CXXFLAGS_OPT)
 # Make sure we handle dependencies.
