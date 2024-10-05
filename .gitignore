@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Build output directory
+/build
+
+# Defend against apple's garbage
+.DS_Store
