@@ -65,7 +65,7 @@ retcode_t video_init() {
 
 SDL_Texture * load_texture_from_file( SDL_Renderer * renderer, const char name[] ) {
     // Load our sprite sheet... likely need to move this to handle multiple, but for now this is fine.
-    SDL_Surface * surface = IMG_Load( default_sprite_sheet );
+    SDL_Surface * surface = IMG_Load( name );
     SDL_Texture * texture = NULL;
     if ( surface ) {
         texture = SDL_CreateTextureFromSurface( renderer, surface );
@@ -108,6 +108,7 @@ retcode_t image_cleanup() {
 }
 
 int main( int argc, char ** argv ) {
+    (void) argc; (void) argv;
     SDL_Init( SDL_INIT_VIDEO );
 
     video_init();
@@ -142,8 +143,6 @@ int main( int argc, char ** argv ) {
     image_cleanup();
 
     video_cleanup();
-
-    printf("Hello World\n");
 
     SDL_Quit();
 }

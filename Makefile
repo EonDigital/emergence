@@ -4,7 +4,7 @@
 
 CXXFLAGS_STD:=-std=c++14
 CXXFLAGS_OPT:=-Os -g --coverage
-CXXFLAGS_WARN:=-Wall -Werror -Wextra -Wno-error=extra -Wunused -Wno-error=unused -Wunused-value -Wno-error=unused-value
+CXXFLAGS_WARN:=-Wall -Werror -Wextra -Wno-error=extra -Wunused -Wno-error=unused -Wunused-value -Wno-error=unused-value  -Wno-error=unused-function
 CPPFLAGS_DEPS:=-MMD -MP
 
 DIR_BUILD:=build
@@ -17,7 +17,7 @@ EXECS+=$(EXEC_emergence)
 # Library support
 LDLIBS_emergence:=$(addprefix -l,SDL2 SDL2main SDL2_image SDL2_mixer gcov stdc++)
 # Standard
-CXXFLAGS_emergence:=$(CXXFLAGS_STD) $(CXXFLAGS_OPT)
+CXXFLAGS_emergence:=$(CXXFLAGS_STD) $(CXXFLAGS_OPT) $(CXXFLAGS_WARN)
 # Make sure we handle dependencies.
 # MMD gets .d files, MP adds header handling
 # To move the file to a uniform place, add -MF
