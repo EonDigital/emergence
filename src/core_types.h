@@ -14,6 +14,7 @@ typedef enum {
     RET_NULL,
     RET_UNSUPPORTED,
     RET_EMPTY,
+    RET_OVERWRITTEN,
 
     RET_fence, // Let this drift to create standard errors
 
@@ -23,6 +24,5 @@ typedef enum {
     RET_GROUP_AUDIO = 0x40000,
 } retcode_enum_t;
 typedef uint32_t retcode_t;
-
 
 #endif /* SRC_CORE_TYPES_H_ */
