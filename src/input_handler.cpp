@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <utility>
 
+#include "simple_logger.h"
+
 class input_handler_impl : public input_handler {
 
 public:
@@ -44,15 +46,16 @@ void input_handler::cleanup_handler( input_handler ** handler ) {
 }
 
 
-
 retcode_t input_handler_impl::register_keypress( ubutton_t button, keypress_handler_fp handler, void * context ) {
     retcode_t result = RET_SUCCESS;
     auto iter = keypress_handlers.find(button);
     if ( iter == keypress_handlers.end() ) {
         keypress_handlers.emplace( button, std::make_pair(handler, context) );
+        LOG_INFO("Registered Keypress %X", button);
     } else {
         iter->second = std::make_pair(handler, context);
         result = RET_OVERWRITTEN;
+        LOG_INFO("Overwrote Keypress %X", button);
     }
     return result;
 }
@@ -62,9 +65,11 @@ retcode_t input_handler_impl::register_axis( ubutton_t button, axis_handler_fp h
     auto iter = axis_handlers.find(button);
     if ( iter == axis_handlers.end() ) {
         axis_handlers.emplace( button, std::make_pair(handler, context) );
+        LOG_INFO("Registered Axis %X", button);
     } else {
         iter->second = std::make_pair(handler, context);
         result = RET_OVERWRITTEN;
+        LOG_INFO("Overwrote Axis %X", button);
     }
     return result;
 }
@@ -74,9 +79,11 @@ retcode_t input_handler_impl::register_axis2d( ubutton_t button, axis2d_handler_
     auto iter = axis2d_handlers.find(button);
     if ( iter == axis2d_handlers.end() ) {
         axis2d_handlers.emplace( button, std::make_pair(handler, context) );
+        LOG_INFO("Registered Axis2D %X", button);
     } else {
         iter->second = std::make_pair(handler, context);
         result = RET_OVERWRITTEN;
+        LOG_INFO("Overwrote Axis2D %X", button);
     }
     return result;
 }
@@ -126,6 +133,7 @@ retcode_t input_handler_impl::unregister_keypress( ubutton_t button ) {
         result = RET_EMPTY;
     } else {
         keypress_handlers.erase(iter);
+        LOG_INFO("Cleared Keypress %X", button);
     }
     return result;
 }
@@ -137,6 +145,7 @@ retcode_t input_handler_impl::unregister_axis( ubutton_t button ) {
         result = RET_EMPTY;
     } else {
         axis_handlers.erase(iter);
+        LOG_INFO("Cleared Axis %X", button);
     }
     return result;
 }
@@ -148,6 +157,7 @@ retcode_t input_handler_impl::unregister_axis2d( ubutton_t button ) {
         result = RET_EMPTY;
     } else {
         axis2d_handlers.erase(iter);
+        LOG_INFO("Cleared Axis2D %X", button);
     }
     return result;
 }

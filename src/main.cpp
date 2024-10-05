@@ -9,6 +9,9 @@
 #include "core_types.h"
 #include "support_sdl.h"
 #include "simple_logger.h"
+#include "input_handler.h"
+
+#include "keypress_handlers.h"
 
 enum {
     default_h = 480,
@@ -28,6 +31,7 @@ typedef struct {
     SDL_Window * win;
     SDL_Renderer * renderer;
     SDL_Texture * sprite_sheet;
+    input_handler * input;
 } system_t;
 
 system_t sys;
@@ -107,6 +111,18 @@ retcode_t image_cleanup() {
     return RET_SUCCESS;
 }
 
+retcode_t input_init() {
+    sys.input = input_handler::create_handler();
+    return RET_SUCCESS;
+}
+
+retcode_t input_cleanup() {
+    if ( sys.input ) {
+        input_handler::cleanup_handler(&sys.input);
+    }
+    return RET_SUCCESS;
+}
+
 int main( int argc, char ** argv ) {
     (void) argc; (void) argv;
     SDL_Init( SDL_INIT_VIDEO );
@@ -116,7 +132,10 @@ int main( int argc, char ** argv ) {
     image_init();
     sys.sprite_sheet = load_texture_from_file( sys.renderer, default_sprite_sheet );
 
+    input_init();
+
     bool running = true;
+    sys.input->register_keypress(universal_button(SOURCE_KEYBOARD, ACT_RELEASE, SDLK_k), false_on_release, &running);
     while( running ) {
         SDL_Event event;
 
@@ -128,6 +147,13 @@ int main( int argc, char ** argv ) {
                 break;
 
             case SDL_KEYUP:
+                sys.input->keypress(
+                    universal_button(
+                        SOURCE_KEYBOARD,
+                       (act_t) ((event.key.state ? ACT_HELD : ACT_FREE)
+                           + (event.key.repeat ? 0 : ACT_transition_to)),
+                       event.key.keysym.sym) );
+
                 if ( event.key.keysym.sym == SDLK_q ) {
                     running = false;
                 }
@@ -139,6 +165,8 @@ int main( int argc, char ** argv ) {
         SDL_RenderCopy(sys.renderer, sys.sprite_sheet, NULL, NULL);
         SDL_RenderPresent( sys.renderer );
     }
+
+    input_cleanup();
 
     image_cleanup();
 

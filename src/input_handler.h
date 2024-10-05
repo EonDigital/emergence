@@ -14,14 +14,19 @@ typedef enum {
     SOURCE_CONTROLLER,
 } source_id_t;
 
+
 typedef enum {
     ACT_FREE,
-    ACT_PRESS,
-    ACT_HELD,
     ACT_RELEASE,
+    ACT_HELD,
+    ACT_PRESS,
+
+    ACT_transition_to = 1,
 } act_t;
 
+
 typedef uint32_t ubutton_t;
+
 
 static ubutton_t universal_button( source_id_t id, act_t act, uint32_t key ) {
     return ( id & 0xF ) << 28
@@ -33,10 +38,12 @@ static act_t get_universal_button_action( ubutton_t button ) {
     return (act_t) ( ( button >> 26 ) & 0x3 );
 }
 
-typedef retcode_t (*keypress_handler_fp)( act_t action, void * context );
-typedef retcode_t (*axis_handler_fp)( act_t action, int32_t pos, void * context );
-typedef retcode_t (*axis2d_handler_fp)( act_t action, int32_t posx, int32_t posy, void * context );
-
+typedef retcode_t (keypress_handler_f)( act_t action, void * context );
+typedef retcode_t (axis_handler_f)( act_t action, int32_t pos, void * context );
+typedef retcode_t (axis2d_handler_f)( act_t action, int32_t posx, int32_t posy, void * context );
+typedef keypress_handler_f *keypress_handler_fp;
+typedef axis_handler_f *axis_handler_fp;
+typedef axis2d_handler_f *axis2d_handler_fp;
 
 class input_handler {
 public:
