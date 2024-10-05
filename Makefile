@@ -43,7 +43,8 @@ $(EXEC_emergence) $(OBJS_emergence) : CXXFLAGS:=$(CXXFLAGS_emergence)
 $(OBJS_emergence) : $(DIR_OBJS_emergence)/%.cpp.o : $(DIR_SRC)/%.cpp
 	echo Making $@
 	$(MKDIR) $(@D)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $^ 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $^
+	-rm $(patsubst %.o,%.gcda,$@) $(patsubst %.o,%.gcno,$@)
 	echo Made   $@
 
 $(EXECS) :
